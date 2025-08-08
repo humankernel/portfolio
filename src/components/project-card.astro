@@ -1,0 +1,40 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image: string;
+  stack: string[];
+}
+
+const { title, description, image, stack } = Astro.props;
+---
+
+<div class="flex gap-2 group">
+  <img
+    src={image}
+    alt={title}
+    height="250"
+    width="250"
+    class="border rounded-xl
+      transform-gpu
+      group-hover:-rotate-5 group-hover:-translate-x-1 group-hover:translate-y-1
+      transition-transform
+      origin-bottom-right"
+  />
+
+  <div class="flex flex-col justify-between px-4">
+    <div>
+      <h1 class="font-bold">{title}</h1>
+      <p class="text-sm mt-2 text-muted-foreground">{description}</p>
+    </div>
+    <ul class="flex gap-1 flex-wrap text-sm mt-4">
+      {
+        stack.map((item) => (
+          <li class="border px-2 rounded-xl bg-card text-card-foreground">
+            {item}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>

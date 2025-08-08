@@ -1,0 +1,16 @@
+---
+import Projects from "@/components/projects.astro";
+import BaseLayout from "@/layouts/base.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+).map((item) => ({
+  id: item.id,
+  ...item.data,
+}))
+---
+
+<BaseLayout title="~/projects">
+  <Projects projects={projects} />
+</BaseLayout>

@@ -1,0 +1,34 @@
+---
+import ProjectCard from "@/components/project-card.astro";
+
+interface Props {
+    projects: {
+        id: string;
+        title: string;
+        description: string;
+        github: string;
+        image: string;
+        stack: string[];
+        pubDate: Date;
+    }[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section class="mt-10 grid gap-4">
+    <h1 id="projects" class="font-bold text-sm">Projects</h1>
+
+    {
+        projects.map((item) => (
+            <a href={`/projects/${item.id}`}>
+                <ProjectCard
+                    title={item.title}
+                    description={item.description}
+                    image={item.image}
+                    stack={item.stack}
+                />
+            </a>
+        ))
+    }
+</section>
