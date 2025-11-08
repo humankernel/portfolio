@@ -1,0 +1,57 @@
+---
+export interface Props {
+    tags: string[];
+    currentCategory?: string;
+    showCount?: boolean;
+    variant?: "default" | "outline" | "minimal";
+}
+
+const {
+    tags,
+    currentCategory,
+    showCount = false,
+    variant = "default",
+} = Astro.props;
+
+const sortedTags = [...tags].sort();
+
+const variantClasses = {
+    default:
+        "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-700 hover:text-red-800 dark:hover:text-red-200",
+    outline:
+        "border border-red-300 dark:border-red-600 text-red-600 dark:text-red-300 hover:border-highlight-500 hover:text-highlight-600 dark:hover:text-highlight-400 hover:bg-highlight-50 dark:hover:bg-highlight-900/20",
+    minimal:
+        "text-red-600 dark:text-red-300 hover:text-highlight-600 dark:hover:text-highlight-400 hover:bg-red-100 dark:hover:bg-red-800",
+};
+---
+
+{
+    sortedTags.length > 0 && (
+        <div class="p-4 bg-white dark:bg-red-900 rounded-xl border border-red-200 dark:border-red-700 shadow-lg backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95">
+            <h3 class="font-semibold text-red-900 dark:text-red-50 mb-3 text-sm">
+                Tags
+            </h3>
+
+            <div class="flex flex-wrap gap-2">
+                {sortedTags.map((tag) => {
+                    const isActive = currentCategory === tag;
+                    return (
+                        <button
+                            data-tag={tag}
+                            class={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer transform hover:scale-105 ${
+                                isActive
+                                    ? "bg-highlight-100 dark:bg-highlight-900/40 text-highlight-800 dark:text-highlight-200 ring-1 ring-highlight-300 dark:ring-highlight-700"
+                                    : variantClasses[variant]
+                            }`}
+                        >
+                            <span class="truncate max-w-32">{tag}</span>
+                            {showCount && (
+                                <span class="text-xs opacity-75 px-1.5">0</span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    )
+}

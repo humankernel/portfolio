@@ -1,0 +1,135 @@
+---
+import { processMarkdownImages } from "@/utils/markdown";
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { formatDate, getStatusClasses } from "@/utils/utils";
+
+interface Props {
+    project: CollectionEntry<"projects">;
+    featured?: boolean;
+    eager?: boolean;
+    context?: "featured" | "recent" | "projects" | "tags" | "home";
+}
+
+const {
+    project,
+    featured = false,
+    eager = false,
+    context = "projects",
+} = Astro.props;
+
+const {
+    slug,
+    title,
+    description,
+    date,
+    image: rawImage,
+    imageAlt,
+    status,
+    tags,
+    projectUrl,
+} = project.data;
+
+const image = processMarkdownImages(rawImage);
+---
+
+<div class="group relative rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 aspect-4/3" data-project-categories={tags?.join(',')}>
+  <a href={`/projects/${slug}`} class="block h-full" aria-label={`View project: ${title}`}>
+    <!-- Background Image or Fallback -->
+    {image && (
+      <div class="absolute inset-0">
+        <Image 
+            src={image}
+            alt={imageAlt || `Cover image for project: ${title}`}
+            width={800}
+            height={600}
+            loading={'eager'}
+            fetchpriority={'high'}
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        
+        <!-- Dark overlay for better text readability -->
+        <div class="absolute inset-0 bg-black/70 group-hover:bg-black/80 transition-colors duration-300"></div>
+      </div>
+    )}
+
+    {!image && (
+      <!-- Fallback background when no image -->
+      <div class="absolute inset-0 bg-linear-to-br from-red-200 to-red-300 dark:from-red-700 dark:to-red-800"></div>
+    )}
+
+    <!-- Status badge -->
+    {status && (
+      <div class="absolute top-3 right-3 z-10">
+        <span class={`px-2 py-1 rounded-full text-xs font-medium shadow-sm ${getStatusClasses(status)}`}>
+          {status}
+        </span>
+      </div>
+    )}
+
+    <!-- Date -->
+    <div class="absolute top-3 left-3 z-10">
+    <time datetime={date.toISOString()} class={`text-xs font-mono px-2 py-1 rounded backdrop-blur-sm ${
+        image
+        ? 'text-white/90 bg-black/20'
+        : 'text-red-700 dark:text-red-200 bg-white/80 dark:bg-black/20'
+    }`}>
+        {formatDate(date)}
+    </time>
+    </div>
+
+    <!-- Content Overlay -->
+    <div class="absolute inset-0 flex flex-col p-6 z-10" style="padding-top: 4rem;">
+      <!-- Spacer to push content down from top elements -->
+      <div class="flex-1"></div>
+
+      <!-- Title -->
+      <h3 class={`text-xl font-bold mb-2 transition-colors line-clamp-2 text-center ${
+        image
+          ? 'text-white group-hover:text-highlight-300 drop-shadow-lg'
+          : 'text-red-900 dark:text-red-50 group-hover:text-highlight-600 dark:group-hover:text-highlight-400'
+      }`}>
+        {title}
+      </h3>
+
+      <!-- Hover content -->
+      <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <!-- Description -->
+        {description && (
+          <p class={`text-sm mb-3 line-clamp-2 text-left ${
+            image
+              ? 'text-white/90 drop-shadow-lg'
+              : 'text-red-700 dark:text-red-300'
+          }`}>
+            {description}
+          </p>
+        )}
+
+        <!-- Categories -->
+        <!-- {showCategories && categories.length > 0 && (
+          <div class="flex flex-wrap gap-1 mb-3 justify-center">
+            {categories.slice(0, 3).map(category => (
+              <span class={`inline-flex items-center px-2 py-1 text-xs font-medium rounded backdrop-blur-sm ${
+                image
+                  ? 'bg-white/20 text-white/90'
+                  : 'bg-red-100 dark:bg-red-700 text-red-700 dark:text-red-200'
+              }`}>
+                {category}
+              </span>
+            ))}
+            {categories.length > 3 && (
+              <span class={`inline-flex items-center px-2 py-1 text-xs font-medium rounded backdrop-blur-sm ${
+                image
+                  ? 'bg-white/20 text-white/90'
+                  : 'bg-red-100 dark:bg-red-700 text-red-700 dark:text-red-200'
+              }`}>
+                +{categories.length - 3} more
+              </span>
+            )}
+          </div>
+        )} -->
+
+      </div>
+    </div>
+  </a>
+</div>
