@@ -2,7 +2,8 @@
 import { processMarkdownImages } from "@/utils/markdown";
 import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
-import { formatDate, getStatusClasses } from "@/utils/utils";
+import { formatDate } from "@/utils/utils";
+import Badge from "@/components/ui/badge.astro";
 
 interface Props {
   project: CollectionEntry<"projects">;
@@ -44,42 +45,34 @@ const fallbackImg = "/avatar.avif";
     aria-label={`View project: ${title}`}
   >
     <!-- Background Image or Fallback -->
-    <div class="absolute inset-0">
-      <Image
-        src={image ?? fallbackImg}
-        alt={imageAlt || `Cover for project: ${title}`}
-        width={800}
-        height={600}
-        loading="eager"
-        fetchpriority="high"
-        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-      />
-
-      <!-- Dark overlay for better text readability -->
-      <div
-        class="absolute inset-0 bg-black/70 group-hover:bg-black/80 transition-colors duration-300"
-      >
-      </div>
-    </div>
+    <Image
+      src={image ?? fallbackImg}
+      alt={imageAlt || `Cover for project: ${title}`}
+      width={800}
+      height={600}
+      loading="eager"
+      fetchpriority="high"
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 brightness-[0.4] group-hover:brightness-[0.3]"
+      transition:name={`${slug}-image`}
+    />
 
     <!-- Status badge -->
-    {
-      status && (
-        <div class="absolute top-3 right-3 z-10">
-          <span
-            class={`px-2 py-1 rounded-full text-xs font-medium shadow-sm ${getStatusClasses(status)}`}
-          >
+    <div class="absolute top-3 right-3 z-10">
+      {
+        status && (
+          <Badge variant={status} transition:name={`${slug}-status`}>
             {status}
-          </span>
-        </div>
-      )
-    }
+          </Badge>
+        )
+      }
+    </div>
 
     <!-- Date -->
     <div class="absolute top-3 left-3 z-10">
       <time
         datetime={date.toISOString()}
         class="text-xs font-mono px-2 py-1 rounded-xl backdrop-blur-sm text-white/90 bg-black/20"
+        transition:name={`${slug}-date`}
       >
         {formatDate(date)}
       </time>
@@ -96,6 +89,7 @@ const fallbackImg = "/avatar.avif";
       <!-- Title -->
       <h3
         class="text-xl font-bold mb-2 transition-colors line-clamp-2 text-center group-hover:text-highlight-300 drop-shadow-lg"
+        transition:name={`${slug}-title`}
       >
         {title}
       </h3>
@@ -107,7 +101,10 @@ const fallbackImg = "/avatar.avif";
         <!-- Description -->
         {
           description && (
-            <p class="text-sm mb-3 line-clamp-2 text-left text-white/90 drop-shadow-lg">
+            <p
+              class="text-sm mb-3 line-clamp-2 text-left text-white/90 drop-shadow-lg"
+              transition:name={`${slug}-description`}
+            >
               {description}
             </p>
           )

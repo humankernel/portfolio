@@ -10,12 +10,13 @@ interface Props {
 const { title, description } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="en" transition:name="root" transition:animate="none">
     <head>
         <meta charset="utf-8" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
+        <meta name="theme-color" content="#000000" />
 
         <title>{title}</title>
         <meta name="title" content={title} />

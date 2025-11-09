@@ -17,6 +17,7 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const {
+    slug,
     title,
     status,
     description,
@@ -30,7 +31,7 @@ const {
 ---
 
 <BaseLayout title={title} description={description}>
-    <div class="p-8 space-y-2" transition:animate="slide">
+    <div class="p-4 md:p-8 space-y-2" transition:animate="slide">
         <nav>
             <button
                 onclick="window.history.back()"
@@ -46,6 +47,7 @@ const {
                     <time
                         datetime={date.toISOString()}
                         class="text-2xs font-mono"
+                        transition:name={`${slug}-date`}
                     >
                         {formatDate(date)}
                     </time>
@@ -61,16 +63,17 @@ const {
                             height={510}
                             loading="eager"
                             decoding="async"
+                            transition:name={`${slug}-image`}
                         />
                     )
                 }
 
-                <header class="flex justify-between items-center mt-8">
+                <header class="flex gap-2 justify-between items-center mt-8">
                     <div class="flex gap-2 items-center">
                         <!-- Title -->
                         <h1
-                            class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance"
-                            transition:name={`${title}-title`}
+                            class="scroll-m-20 text-2xl md:text-4xl font-extrabold tracking-tight text-balance"
+                            transition:name={`${slug}-title`}
                         >
                             {title}
                         </h1>
@@ -79,7 +82,7 @@ const {
                             status && (
                                 <Badge
                                     variant={status}
-                                    transition:name={`${title}-status`}
+                                    transition:name={`${slug}-status`}
                                 >
                                     {status}
                                 </Badge>
@@ -118,7 +121,7 @@ const {
                 </div>
 
                 <h2 class="text-xl font-semibold mt-8">Project Overview</h2>
-                <p transition:name={`${title}-description`}>
+                <p>
                     {description}
                 </p>
 
