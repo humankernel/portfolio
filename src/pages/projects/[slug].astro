@@ -33,12 +33,9 @@ const {
 <BaseLayout title={title} description={description}>
     <div class="p-4 md:p-8 space-y-2" transition:animate="slide">
         <nav>
-            <button
-                onclick="window.history.back()"
-                class="px-3 py-1.5 rounded-lg cursor-pointer"
-            >
+            <Button variant="ghost" onclick="window.history.back()">
                 ← Go Back
-            </button>
+            </Button>
         </nav>
         <main>
             <article class="space-y-4">
