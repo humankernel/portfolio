@@ -1,56 +1,70 @@
 ---
-import "@/styles/global.css";
+import BaseLayout from "@/layouts/base.astro";
 import { getCollection } from "astro:content";
-import CommonHead from "../components/common-head.astro";
 import { Image } from "astro:assets";
 import ProjectCard from "@/components/project-card.astro";
+import Button from "@/components/ui/button.astro";
+
+import TelegramIcon from "@/assets/telegram.svg";
+import WhatsappIcon from "@/assets/whatsapp.svg";
+import TelephoneIcon from "@/assets/telephone.svg";
+import GmailIcon from "@/assets/gmail.svg";
 
 const featuredProjects = (await getCollection("projects"))
   .filter((project) => project.data.featured)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const desc = `
-​Five weeks ago, we selected 50 hardware builders who couldn't let their blueprints die on paper. People already deep in it. Past the point where turning back makes sense. Ideas ranged from $1000 mini humanoids to drones that can traverse land to glasses for performance athletes.
+const experience = [
+  {
+    position: "Auxiliar Teacher of Machine Learning Course",
+    at: "UCI",
+    time: "(2025 - present)",
+  },
+];
 
-​Now, after 38 days of late nights in our labs, complete pivots, and relentless building with 3D printers, CNCs, and soldering stations, they're ready to transform our campus into a wonderland of working hardware, live demos, and things you can actually touch and try.
-
-​​Join us November 7 5pm for the Blueprint finale — a festival of inventions where you'll test-drive robots, interact with next-gen hardware, hold devices that were just sketches not too long ago, and see what happens when people bring their blueprints to life.
-
-​Live music, DJs, food trucks and local artisans will also be an extension of the experience provided by Fort Mason Night Market. Learn more.
-`;
+const education = [
+  {
+    degree: "Computer Science Engineering",
+    at: "Universidad de las Ciencias Informáticas (UCI)",
+    where: "Habana, Cuba",
+    time: "(2022 - 2025)",
+  },
+];
 ---
 
-<html lang="en">
-  <head>
-    <CommonHead title="Joaquin Rivas Sanchez" description="Personal Website" />
-  </head>
-  <body
-    transition:animate="slide"
-    class="flex flex-col md:flex-row gap-2 p-0 md:p-8"
-  >
-    <aside class="flex-1 space-y-2 border-2 p-4 h-fit">
+<BaseLayout title="Joaquin Rivas Sanchez" description="Personal Website">
+  <div class="flex flex-col md:flex-row gap-2 p-0 md:p-8">
+    <!-- Info -->
+    <aside class="flex-1 space-y-2 p-4 h-fit">
+      <!-- Image -->
       <Image
-        src="https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,background=white,quality=75,width=400,height=400/event-covers/wd/8ba5f884-eea1-4fa9-a7e1-3995e992760e.png"
-        alt="Image of Joaquin"
+        src="/avatar.avif"
+        alt="Me"
         class="rounded-2xl shadow-xl hover:shadow-2xl w-[70%] mx-auto md:w-full"
         width={800}
         height={800}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
       />
 
       <div class="flex flex-col lg:flex-row items-center justify-between my-4">
+        <!-- Name -->
         <h1 class="text-lg font-bold">Joaquin E. Rivas Sanchez</h1>
-        <div class="flex gap-1">
+
+        <!-- Social Networks -->
+        <div class="flex">
           <!-- GitHub -->
           <a
             href="https://github.com/humankernel"
             target="_blank"
             aria-label="GitHub"
-            class="relative group inline-flex items-center justify-center w-6 h-6 rounded-lg text-[#181717] hover:bg-[#181717] hover:text-white transition"
+            class="relative group inline-flex items-center justify-center p-2 rounded-full hover:bg-[#181717]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
-              class="w-4 h-4"
+              class="size-4"
             >
               <path
                 fill="currentColor"
@@ -58,7 +72,7 @@ const desc = `
               ></path>
             </svg>
             <span
-              class="absolute bottom-full mb-1 hidden group-hover:block text-xs bg-gray-800 text-white rounded px-1.5 py-0.5"
+              class="absolute bottom-full mb-1 hidden group-hover:block text-xs bg-gray-800 rounded px-1.5 py-0.5"
             >
               GitHub: @humankernel
             </span>
@@ -68,12 +82,12 @@ const desc = `
             href="https://x.com/strangedevel"
             target="_blank"
             aria-label="X (Twitter)"
-            class="relative group inline-flex items-center justify-center w-6 h-6 rounded-lg text-black hover:bg-black hover:text-white transition"
+            class="relative group inline-flex items-center justify-center p-2 rounded-full hover:bg-[#181717]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 120 120"
-              class="w-4 h-4"
+              class="size-4"
             >
               <path
                 fill="currentColor"
@@ -92,12 +106,12 @@ const desc = `
             href="https://linkedin.com/in/strangedevel"
             target="_blank"
             aria-label="LinkedIn"
-            class="relative group inline-flex items-center justify-center w-6 h-6 rounded-lg text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white transition"
+            class="relative group inline-flex items-center justify-center p-2 rounded-full hover:bg-[#181717]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 448 512"
-              class="w-4 h-4"
+              class="size-4"
             >
               <path
                 fill="currentColor"
@@ -112,33 +126,87 @@ const desc = `
           </a>
         </div>
       </div>
-      <p class="opacity-70">
+
+      <!-- Who am I -->
+      <p class="text-muted-foreground leading-7">
         Hi, I'm Joaquin — a developer passionate about building clean,
         efficient, and creative solutions. I enjoy learning new technologies and
         turning ideas into functional, user-friendly software.
       </p>
 
-      <h2 class="py-2 border-b">Work Experience</h2>
-      <ul class="opacity-70">
-        <li>Auxiliar Teacher of Machine Learning Course - (2025 - present)</li>
+      <!-- Experience -->
+      <h2
+        class="scroll-m-20 border-b border-muted-foreground pb-2 text-lg font-semibold tracking-tight first:mt-0"
+      >
+        Work Experience
+      </h2>
+      <ul class="my-2 ml-6 list-disc [&>li]:mt-2">
+        {
+          experience.map(({ position, at, time }) => (
+            <li class="text-muted-foreground leading-7">
+              {position} - {at} - {time}
+            </li>
+          ))
+        }
       </ul>
 
-      <h2 class="py-2 border-b">Education</h2>
-      <ul class="opacity-70">
-        <li>Universidad de las Ciencias Informáticas (UCI) Habana - Cuba</li>
+      <!-- Education -->
+      <h2
+        class="scroll-m-20 border-b border-muted-foreground pb-2 text-lg font-semibold tracking-tight first:mt-0"
+      >
+        Education
+      </h2>
+      <ul class="my-2 ml-6 list-disc [&>li]:mt-2">
+        {
+          education.map(({ degree, at, where, time }) => (
+            <li class="text-muted-foreground leading-7">
+              {degree} - {at} - {where} - {time}
+            </li>
+          ))
+        }
       </ul>
 
-      <h2 class="py-2 border-b">Contact Info</h2>
-      <div class="opacity-70">
-        <a href=""> Telegram </a>
-        <a href=""> Whatsapp </a>
-        <a href=""> Email </a>
-        <a href=""> Telephone </a>
+      <!-- Contact -->
+      <h2
+        class="scroll-m-20 border-b border-muted-foreground pb-2 text-lg font-semibold tracking-tight first:mt-0"
+      >
+        Contact Info
+      </h2>
+      <div class="text-muted-foreground leading-7 grid grid-cols-2">
+        <Button variant="ghost">
+          <a href="https://t.me/humankernel" class="flex gap-2 items-center">
+            <TelegramIcon class="size-4" />
+            Telegram
+          </a>
+        </Button>
+
+        <Button variant="ghost">
+          <a href="" class="flex gap-2 items-center">
+            <WhatsappIcon class="size-4" />
+            Whatsapp
+          </a>
+        </Button>
+        <Button variant="ghost">
+          <a href="" class="flex gap-2">
+            <GmailIcon class="size-4" />
+            Email
+          </a>
+        </Button>
+        <Button variant="ghost">
+          <a href="" class="flex gap-2 items-center">
+            <TelephoneIcon class="size-4" />
+            Telephone
+          </a>
+        </Button>
       </div>
 
-      <h2 class="py-2 border-b">Skill Assessment</h2>
-      <ul class="opacity-70">
-        <!-- Link to Roadmap.md progress -->
+      <!-- Skills -->
+      <h2
+        class="scroll-m-20 border-b border-muted-foreground pb-2 text-lg font-semibold tracking-tight first:mt-0"
+      >
+        Skill Assessment
+      </h2>
+      <ul class="text-muted-foreground leading-7">
         <li>English [B1 70%]</li>
         <li>Python [90%]</li>
         <li>Typescript [90%]</li>
@@ -149,12 +217,13 @@ const desc = `
       </ul>
     </aside>
 
-    <main class="flex-2 w-full space-y-8 border-2 p-4">
+    <!-- Projects & Blog -->
+    <main class="flex-2 w-full space-y-8 p-4">
       <!-- Featured Projects -->
       <section>
         <div class="flex items-center justify-between mb-6">
           <h2
-            class="text-lg font-semibold text-primary-900 dark:text-primary-50"
+            class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight"
           >
             Projects
           </h2>
@@ -162,7 +231,7 @@ const desc = `
             href="/projects"
             class="text-primary-600 dark:text-primary-300 hover:text-highlight-600 dark:hover:text-highlight-400 font-medium transition-colors"
           >
-            View all projects →
+            View all projects <span> → </span>
           </a>
         </div>
 
@@ -175,5 +244,5 @@ const desc = `
         </div>
       </section>
     </main>
-  </body>
-</html>
+  </div>
+</BaseLayout>

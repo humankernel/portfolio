@@ -1,0 +1,45 @@
+---
+interface Props {
+    variant?:
+        | "default"
+        | "secondary"
+        | "destructive"
+        | "outline"
+        | "completed"
+        | "in-progress";
+}
+
+const { variant = "default" } = Astro.props;
+---
+
+<span data-badge data-variant={variant}>
+    <slot />
+</span>
+
+<style is:global>
+    @reference "../../styles/global.css";
+    @layer components {
+        [data-badge] {
+            @apply select-none cursor-pointer inline-flex items-center justify-center rounded-full border border-transparent px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:size-3 [&>svg]:pointer-events-none;
+        }
+
+        [data-badge][data-variant="default"] {
+            @apply bg-primary text-primary-foreground hover:bg-primary/90;
+        }
+        [data-badge][data-variant="secondary"] {
+            @apply bg-secondary text-secondary-foreground hover:bg-secondary/90;
+        }
+        [data-badge][data-variant="outline"] {
+            @apply border-border text-foreground hover:bg-muted/50;
+        }
+        [data-badge][data-variant="destructive"] {
+            @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+        }
+        [data-badge][data-variant="completed"] {
+            @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+        }
+        [data-badge][data-variant="in-progress"] {
+            @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+        }
+    }
+</style>

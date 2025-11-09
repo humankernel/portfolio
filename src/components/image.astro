@@ -1,0 +1,96 @@
+---
+interface Props extends astroHTML.JSX.ImgHTMLAttributes {
+    src: string;
+    alt?: string;
+    className?: string;
+}
+
+const { src, alt = "", className = "", ...rest } = Astro.props;
+---
+
+<div class="relative">
+    <img
+        src={src}
+        alt={alt}
+        class:list={[
+            className,
+            "cursor-zoom-in transition-transform duration-200 hover:scale-[1.02]",
+        ]}
+        data-lightbox-trigger
+        {...rest}
+    />
+</div>
+
+<!-- The lightbox overlay -->
+<div id="lightbox-overlay">
+    <img id="lightbox-image" alt="" />
+</div>
+
+<style>
+    /* Overlay (hidden by default) */
+    #lightbox-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 50;
+    }
+
+    /* Show overlay */
+    #lightbox-overlay.show {
+        display: flex;
+        animation: fadeIn 0.25s ease;
+    }
+
+    /* Image inside overlay */
+    #lightbox-overlay img {
+        max-width: 90vw;
+        max-height: 90vh;
+        border-radius: 0.5rem;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+        cursor: zoom-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+
+<script>
+    // Run after DOM is ready
+    document.addEventListener("DOMContentLoaded", () => {
+        const overlay = document.getElementById("lightbox-overlay");
+        const overlayImg = document.getElementById("lightbox-image");
+
+        document.addEventListener("click", (e) => {
+            const trigger = e.target.closest("[data-lightbox-trigger]");
+
+            // Open overlay
+            if (trigger) {
+                overlayImg.src = trigger.src;
+                overlayImg.alt = trigger.alt || "";
+                overlay.classList.add("show");
+                return;
+            }
+
+            // Close overlay if clicking background or image
+            if (e.target === overlay || e.target === overlayImg) {
+                overlay.classList.remove("show");
+            }
+        });
+
+        // ESC key closes overlay
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                overlay.classList.remove("show");
+            }
+        });
+    });
+</script>

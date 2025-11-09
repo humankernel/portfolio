@@ -11,7 +11,7 @@ const projects = defineCollection({
         tech: z.array(z.string()).nullable().optional(),
         date: z.coerce.date().default(() => new Date()),
         projectUrl: z.string().url().nullable().optional(),
-        status: z.string().nullable().optional(),
+        status: z.enum(["in-progress", "completed"]).nullable().optional(),
         image: z.any().nullable().optional().transform((val) => {
             // Handle various Obsidian syntax formats
             if (Array.isArray(val)) {

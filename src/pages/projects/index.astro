@@ -1,5 +1,5 @@
 ---
-import "@/styles/global.css";
+import BaseLayout from "@/layouts/base.astro";
 import ProjectCard from "@/components/project-card.astro";
 import Tags from "@/components/tags.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
@@ -27,43 +27,47 @@ function getProjectTags(projects: CollectionEntry<"projects">[]): string[] {
 const allTags = getProjectTags(allProjects);
 ---
 
-<div class="py-8 mx-auto px-4 sm:px-6 lg:px-8 mb-12 max-w-6xl">
-    <header class="mb-8">
-        <h1 class="text-xl text-center md:text-start font-bold mb-3">
-            Projects
-        </h1>
-    </header>
+<BaseLayout title="Projects">
+    <div class="py-8 mx-auto px-4 sm:px-6 lg:px-8 mb-12 max-w-6xl">
+        <header class="mb-8">
+            <h1
+                class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight"
+            >
+                Projects
+            </h1>
+        </header>
 
-    <div>
-        <!-- Projects grid -->
-        <div class="max-w-none">
-            {
-                allProjects.length > 0 ? (
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                        {allProjects.map((project, index) => (
-                            <ProjectCard
-                                project={project}
-                                eager={index < 4}
-                                context="projects"
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <div class="text-center py-12">
-                        {/* <Icon name="folder-open" class="w-12 h-12 text-primary-300 dark:text-primary-600 mx-auto mb-4" /> */}
-                        <h3 class="text-lg font-medium text-primary-900 dark:text-primary-50 mb-2">
-                            No projects yet
-                        </h3>
-                        <p class="text-primary-600 dark:text-primary-300">
-                            Check back soon for new projects!
-                        </p>
-                    </div>
-                )
-            }
-        </div>
+        <div>
+            <!-- Projects grid -->
+            <div class="max-w-none">
+                {
+                    allProjects.length > 0 ? (
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                            {allProjects.map((project, index) => (
+                                <ProjectCard
+                                    project={project}
+                                    eager={index < 4}
+                                    context="projects"
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div class="text-center py-12">
+                            {/* <Icon name="folder-open" class="w-12 h-12 text-primary-300 dark:text-primary-600 mx-auto mb-4" /> */}
+                            <h3 class="text-lg font-medium text-primary-900 dark:text-primary-50 mb-2">
+                                No projects yet
+                            </h3>
+                            <p class="text-primary-600 dark:text-primary-300">
+                                Check back soon for new projects!
+                            </p>
+                        </div>
+                    )
+                }
+            </div>
 
-        <div class="xl:hidden mt-12 space-y-6">
-            {allTags.length > 0 && <Tags tags={allTags} />}
+            <div class="xl:hidden mt-12 space-y-6">
+                {allTags.length > 0 && <Tags tags={allTags} />}
+            </div>
         </div>
     </div>
-</div>
+</BaseLayout>

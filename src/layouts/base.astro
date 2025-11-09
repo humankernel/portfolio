@@ -1,0 +1,46 @@
+---
+import "@/styles/global.css";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+    title: string;
+    description?: string | null;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
+
+        <link
+            rel="preload"
+            href="/fonts/Satoshi.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            href="/fonts/InstrumentSans.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+
+        <ClientRouter />
+    </head>
+    <body transition:animate="slide" class="dark">
+        <div class="max-w-6xl mx-auto w-full relative">
+            <slot />
+        </div>
+    </body>
+</html>
