@@ -39,9 +39,10 @@ const { title, description } = Astro.props;
 
         <ClientRouter />
     </head>
-    <body transition:animate="slide" class="dark">
-        <div class="max-w-6xl mx-auto w-full relative">
-            <slot />
-        </div>
+    <body
+        transition:animate="slide"
+        class="dark max-w-6xl mx-auto w-full relative p-4 md:p-8 space-y-2"
+    >
+        <slot />
     </body>
 </html>

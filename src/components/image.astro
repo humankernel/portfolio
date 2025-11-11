@@ -12,10 +12,7 @@ const { src, alt = "", className = "", ...rest } = Astro.props;
     <img
         src={src}
         alt={alt}
-        class:list={[
-            className,
-            "cursor-zoom-in transition-transform duration-200 hover:scale-[1.02]",
-        ]}
+        class={className}
         data-lightbox-trigger
         {...rest}
     />

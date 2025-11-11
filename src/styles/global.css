@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* -------------------- Fonts -------------------- */
+
 @font-face {
     font-family: "Satoshi";
     src: url("/fonts/Satoshi.woff2") format("woff2"),
@@ -17,14 +19,16 @@
     font-display: swap;
 }
 
+/* -------------------- Theme Variables -------------------- */
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
     --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
-    --popover: oklch(0.21 0.006 285.885);
-    --popover-foreground: oklch(0.985 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.141 0.005 285.823);
     --primary: oklch(0.637 0.237 25.331);
     --primary-foreground: oklch(0.971 0.013 17.38);
     --secondary: oklch(0.967 0.001 286.375);
@@ -37,12 +41,18 @@
     --border: oklch(0.92 0.004 286.32);
     --input: oklch(0.92 0.004 286.32);
     --ring: oklch(0.637 0.237 25.331);
-    --font: system-ui, sans-serif;
 
-    --background-base: #ffffff;
+    --font: "Instrument Sans", system-ui, sans-serif;
+    --background-base: #fff;
     --background-pattern: none;
 
+    /* Code block colors (light) */
+    --code-bg: 33 33 33;
+    --code-text: 240 240 240;
+    --inline-code-bg: 240 240 240;
+    --inline-code-text: 33 33 33;
 }
+
 
 .dark {
     --background: oklch(0.141 0.005 285.823);
@@ -50,7 +60,6 @@
     --popover: oklch(0.21 0.006 285.885);
     --popover-foreground: oklch(0.985 0 0);
     --primary: oklch(0.637 0.237 25.331);
-    --primary-foreground: oklch(0.971 0.013 17.38);
     --secondary: oklch(0.274 0.006 286.033);
     --secondary-foreground: oklch(0.985 0 0);
     --muted: oklch(0.274 0.006 286.033);
@@ -62,19 +71,25 @@
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.637 0.237 25.331);
 
-    --background-base: #000000;
+
+    --background-base: #000;
     --background-pattern:
         radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.2) 1px, transparent 0),
         radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.18) 1px, transparent 0),
         radial-gradient(circle at 1px 1px, rgba(236, 72, 153, 0.15) 1px, transparent 0);
 
+    /* Code blocks (dark) */
+    --code-bg: 23 23 23;
+    --code-text: 240 240 240;
+    --inline-code-bg: 55 55 55;
+    --inline-code-text: 240 240 240;
 }
+
+/* -------------------- Tailwind Theme Tokens -------------------- */
 
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
-    --color-card: var(--card);
-    --color-card-foreground: var(--card-foreground);
     --color-popover: var(--popover);
     --color-popover-foreground: var(--popover-foreground);
     --color-primary: var(--primary);
@@ -96,14 +111,22 @@
     --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* -------------------- Base Styles -------------------- */
+
 @layer base {
     * {
-        border-color: oklch(var(--border));
-        @apply outline-none focus-visible:outline-ring/50;
+        @apply border-border outline-ring/50;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    html {
+        scroll-behavior: auto;
     }
 
     body {
-        @apply bg-background text-foreground tracking-wide antialiased;
+        @apply bg-background text-foreground antialiased tracking-wide;
+        font-family: var(--font);
         background-color: var(--background-base);
         background-image: var(--background-pattern);
         background-size: 20px 20px, 30px 30px, 25px 25px;
@@ -111,10 +134,24 @@
         background-attachment: fixed;
     }
 
-    img {
-        width: 100%;
-        border-radius: 0.75rem;
+    /* Hide scrollbars globally */
+    ::-webkit-scrollbar {
+        display: none;
     }
+
+    /* Selection highlight */
+    ::selection {
+        background-color: var(--primary);
+        color: inherit;
+    }
+
+    /* --------------- Images --------------- */
+
+    img {
+        @apply w-full rounded-xl cursor-zoom-in transition-transform duration-200 hover:scale-[1.02];
+    }
+
+    /* -------------  Typography ------------- */
 
     h1,
     h2,
@@ -122,10 +159,80 @@
         font-family: "Satoshi", sans-serif;
     }
 
-    body,
-    p,
-    li,
-    span {
-        font-family: "Instrument Sans", sans-serif;
+    h1 {
+        @apply scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance;
     }
+
+    h2 {
+        @apply scroll-m-20 border-b border-muted pb-2 text-2xl font-semibold tracking-tight first:mt-0;
+    }
+
+    h3 {
+        @apply scroll-m-20 text-xl font-semibold tracking-tight;
+    }
+
+    h4 {
+        @apply scroll-m-20 text-lg font-semibold tracking-tight;
+    }
+
+    p {
+        @apply leading-7 not-first:mt-6;
+    }
+
+    blockquote {
+        @apply mt-6 border-l-2 pl-6 italic;
+    }
+
+    strong {
+        @apply font-bold;
+    }
+
+    /* -------------------- Tables -------------------- */
+
+    table {
+        @apply w-full;
+    }
+
+    th {
+        @apply border px-4 py-2 text-left font-bold [[align=center]]:text-center [[align=right]]:text-right;
+    }
+
+    td {
+        @apply border px-4 py-2 text-left [[align=center]]:text-center [[align=right]]:text-right;
+    }
+
+    tr {
+        @apply even:bg-muted m-0 border-t p-0;
+    }
+
+    /* -------------------- Lists -------------------- */
+
+    ul {
+        @apply my-2 ml-4 list-disc [&>li]:mt-1;
+    }
+
+    /* -------------------- Code -------------------- */
+
+    code {
+        @apply bg-muted/70 rounded-md px-[0.35rem] py-[0.15rem] font-mono text-[0.85em] font-medium text-foreground;
+        /* A subtle outline makes inline code pop in paragraphs */
+        box-shadow: 0 0 0 1px rgb(0 0 0 / 0.05);
+    }
+
+    pre {
+        @apply relative bg-muted rounded-xl font-mono text-sm leading-relaxed;
+        @apply p-4 my-4 overflow-x-auto border border-border/30 shadow-sm;
+    }
+
+    /* Let code inside <pre> breathe (remove double padding) */
+    pre code {
+        @apply bg-transparent p-0 text-sm font-normal;
+    }
+
+    /* Optional: add a small language label on top (like “bash”, “go”, etc.) */
+    pre[data-language]::before {
+        content: attr(data-language);
+        @apply absolute top-2 right-3 text-xs uppercase text-muted-foreground;
+    }
+
 }

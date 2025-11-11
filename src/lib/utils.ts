@@ -1,4 +1,32 @@
 
+export function formatDate(date: Date): string {
+    // If the date is at midnight UTC, it was likely a YYYY-MM-DD date
+    // that was parsed as UTC but should be treated as local
+    if (
+        date.getUTCHours() === 0 &&
+        date.getUTCMinutes() === 0 &&
+        date.getUTCSeconds() === 0
+    ) {
+        // Create a new date in local timezone using the UTC date components
+        const localDate = new Date(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate()
+        );
+        return localDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    }
+
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+}
+
 // Process Obsidian bracket syntax in image field (copy from PostCard)
 export function processMarkdownImages(rawImage?: string) {
     if (!rawImage) return rawImage;

@@ -33,14 +33,14 @@ const education = [
 ---
 
 <BaseLayout title="Joaquin Rivas Sanchez" description="Personal Website">
-  <div class="flex flex-col md:flex-row gap-2 p-0 md:p-8">
+  <div class="flex flex-col lg:flex-row gap-2 p-0 md:p-8">
     <!-- Info -->
     <aside class="flex-1 space-y-2 p-4 h-fit">
       <!-- Image -->
       <Image
         src="/avatar.avif"
         alt="Me"
-        class="rounded-2xl shadow-xl hover:shadow-2xl w-[70%] mx-auto md:w-full"
+        class="rounded-2xl shadow-xl hover:shadow-2xl w-[70%] mx-auto lg:w-full"
         width={800}
         height={800}
         loading="eager"
@@ -237,7 +237,7 @@ const education = [
           </Button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid sm:grid-cols-2 gap-6">
           {
             featuredProjects.map((project) => (
               <ProjectCard project={project} eager={false} context="home" />
